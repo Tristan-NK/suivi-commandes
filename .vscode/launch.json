@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Ouvrir directement dans Chrome",
+      "file": "${workspaceFolder}/suivi-commandes/index.html"
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Lancer sur localhost:8080",
+      "url": "http://localhost:8080",
+      "webRoot": "${workspaceFolder}/suivi-commandes"
+    }
+  ]
+}

@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <title>Suivi Commandes Gabon</title>
+  <meta name="description" content="Application mobile de gestion des livraisons au Gabon (Libreville, Owendo, Akanda, Ntoum).">
+  <meta name="theme-color" content="#070b14" id="metaThemeColor">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Livraisons">
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="mobile-app-shell">
+
+  <!-- ==================== ÉCRAN DE CONNEXION ÉPURÉ & MODERNE ==================== -->
+  <section id="loginScreen" class="login-view">
+    <div class="login-container">
+      <div class="login-brand-header">
+        <div class="login-icon-ring">
+          <img src="icon.svg" alt="App Logo" width="56" height="56">
+        </div>
+        <h1 class="login-title">Suivi des Livraisons</h1>
+        <p class="login-sub">Grand Libreville · Gabon 🇬🇦</p>
+      </div>
+
+      <div class="login-card-glass">
+        <div class="input-block">
+          <label for="loginUsername" class="input-label">Nom de votre commerce / Prénom</label>
+          <div class="input-with-icon">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <input id="loginUsername" type="text" placeholder="Ex: Boutique Élégance, Marie..." autocomplete="username">
+          </div>
+        </div>
+
+        <div class="input-block">
+          <label for="loginPin" class="input-label">Code PIN secret (4 chiffres)</label>
+          <div class="input-with-icon">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            <input id="loginPin" type="password" inputmode="numeric" maxlength="6" placeholder="••••" autocomplete="current-password">
+          </div>
+          <span class="input-hint">Définissez un code simple (ex: 1234) pour sécuriser vos accès.</span>
+        </div>
+
+        <div class="err-box" id="loginError"></div>
+
+        <button type="button" class="btn-native btn-primary-native" id="btnLoginSubmit">
+          <span>Ouvrir mon application</span>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+        </button>
+      </div>
+
+      <div class="login-footer-info">
+        <small>Application autonome · Données sécurisées sur votre appareil</small>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== STRUCTURE DE L'APPLICATION ACTIVE ==================== -->
+  <div id="mainAppInterface" class="hid">
+
+    <!-- HEADER MOBILE NATIF (APP BAR) -->
+    <header class="mobile-appbar">
+      <div class="appbar-left">
+        <!-- Bouton Menu 3 Traits -->
+        <button id="btnOpenDrawer" class="btn-appbar-icon" aria-label="Menu" title="Menu">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="18" x2="20" y2="18"></line></svg>
+        </button>
+        <div class="appbar-brand">
+          <h1 class="appbar-title" id="appbarTitle">Commandes à livrer</h1>
+          <span class="appbar-subtitle" id="userDisplayName">Session active</span>
+        </div>
+      </div>
+
+      <div class="appbar-right">
+        <!-- Bouton Thème Sombre / Clair -->
+        <button id="btnThemeToggle" class="btn-appbar-icon" title="Thème" aria-label="Changer le thème">
+          <svg id="themeIconDark" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          <svg id="themeIconLight" class="hid" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        </button>
+
+        <!-- Bouton Déconnexion Rapide -->
+        <button id="btnQuickLogout" class="btn-appbar-icon btn-logout-icon" title="Se déconnecter" aria-label="Se déconnecter">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- BANNIERE D'ALARME URGENTE -->
+    <aside id="banner" class="floating-alert-banner" role="alert" aria-live="assertive">
+      <div class="banner-inner">
+        <div class="banner-pulse-icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        </div>
+        <div id="bannerText" class="banner-msg"></div>
+        <button id="bannerDismiss" class="btn-banner-snooze" type="button">Sourdine (10m)</button>
+      </div>
+    </aside>
+
+    <!-- MENU TIROIR LATERAL (DRAWER MOBILE) -->
+    <div id="drawerBackdrop" class="drawer-backdrop" aria-hidden="true"></div>
+    <aside id="mobileDrawer" class="mobile-drawer" aria-label="Menu principal">
+      <div class="drawer-top-profile">
+        <div class="profile-avatar">
+          <img src="icon.svg" alt="App Logo" width="46" height="46">
+        </div>
+        <div class="profile-meta">
+          <div class="profile-title" id="drawerUserName">Mon Espace</div>
+          <div class="profile-badge">Gabon Edition 🇬🇦</div>
+        </div>
+        <button id="btnCloseDrawer" class="btn-close-drawer" aria-label="Fermer le menu">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <nav class="drawer-menu-list">
+        <button class="drawer-nav-item active" data-nav="todo">
+          <span class="drawer-item-icon color-blue">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          </span>
+          <span class="drawer-item-label">Commandes à livrer</span>
+          <span class="drawer-item-count" id="drawerCountTodo">0</span>
+        </button>
+
+        <button class="drawer-nav-item" data-nav="new">
+          <span class="drawer-item-icon color-green">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+          </span>
+          <span class="drawer-item-label">Nouvelle commande</span>
+        </button>
+
+        <button class="drawer-nav-item" data-nav="hist">
+          <span class="drawer-item-icon color-purple">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+          </span>
+          <span class="drawer-item-label">Historique des courses</span>
+          <span class="drawer-item-count" id="drawerCountHist">0</span>
+        </button>
+
+        <button class="drawer-nav-item" data-nav="stats">
+          <span class="drawer-item-icon color-amber">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+          </span>
+          <span class="drawer-item-label">Bilan & Top Quartiers</span>
+        </button>
+
+        <button class="drawer-nav-item" data-nav="settings">
+          <span class="drawer-item-icon color-teal">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          </span>
+          <span class="drawer-item-label">Sonneries & Support</span>
+        </button>
+
+        <div class="drawer-divider"></div>
+
+        <button class="drawer-nav-item drawer-logout-item" id="btnDrawerLogout">
+          <span class="drawer-item-icon color-danger">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          </span>
+          <span class="drawer-item-label">Se déconnecter</span>
+        </button>
+      </nav>
+
+      <div class="drawer-footer-card">
+        <small>Application Suivi Commandes Gabon · 2026</small>
+      </div>
+    </aside>
+
+    <!-- ==================== CONTENU DES ÉCRANS ==================== -->
+    <main class="mobile-screens-container">
+
+      <!-- ========== ÉCRAN 1 : COMMANDES A LIVRER (LISTE ACCORDÉON) ========== -->
+      <section id="screenTodo" class="mobile-screen active">
+        <!-- Résumé KPI -->
+        <div class="screen-kpi-row">
+          <div class="kpi-card-mobile kpi-accent-blue" id="kpiBtnAllTodo">
+            <span class="kpi-big-num" id="kpiCountTodo">0</span>
+            <span class="kpi-mini-lbl">À livrer</span>
+          </div>
+          <div class="kpi-card-mobile kpi-accent-red" id="kpiBtnOnlyLate">
+            <span class="kpi-big-num" id="kpiCountLate">0</span>
+            <span class="kpi-mini-lbl">En retard</span>
+          </div>
+          <div class="kpi-card-mobile kpi-accent-green">
+            <span class="kpi-big-num" id="kpiTotalFee">0 F</span>
+            <span class="kpi-mini-lbl">À encaisser</span>
+          </div>
+        </div>
+
+        <!-- Recherche rapide -->
+        <div class="mobile-search-bar">
+          <svg class="search-ico" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="search" id="inputSearchTodo" placeholder="Rechercher nom client, quartier, article..." autocomplete="off">
+          <button id="btnClearSearch" class="btn-clear-search hid">✕</button>
+        </div>
+
+        <!-- Chips des communes -->
+        <div class="gabon-chips-scroll">
+          <button class="chip-filter active" data-city="">Toutes (Grand Libreville)</button>
+          <button class="chip-filter" data-city="Libreville">Libreville (2000 F)</button>
+          <button class="chip-filter" data-city="Owendo">Owendo (3000 F)</button>
+          <button class="chip-filter" data-city="Akanda">Akanda (3000 F)</button>
+          <button class="chip-filter" data-city="Ntoum">Ntoum (4000 F)</button>
+        </div>
+
+        <!-- Hint d'ergonomie accordéon -->
+        <div class="feed-accordion-hint">
+          <span>👆 Touchez une commande pour afficher tous les détails et les actions</span>
+        </div>
+
+        <!-- Feed des commandes sous forme de Liste Accordéon -->
+        <div id="ordersFeedTodo" class="accordion-orders-list"></div>
+      </section>
+
+      <!-- ========== ÉCRAN 2 : NOUVELLE COMMANDE ========== -->
+      <section id="screenNew" class="mobile-screen">
+        <div class="mobile-form-card">
+          <div class="form-header-row">
+            <div>
+              <h2 class="form-title" id="formMainTitle">Nouvelle Course</h2>
+              <p class="form-sub">Tarifs automatiquement fixés selon la commune</p>
+            </div>
+            <span class="badge-auto-order" id="badgeAutoNum">GA-001</span>
+          </div>
+
+          <form id="orderForm" onsubmit="return false;">
+            <!-- Nom & Contact Client -->
+            <div class="input-block">
+              <label for="inpClient" class="input-label">Nom ou Téléphone du Client <span class="req">*</span></label>
+              <div class="input-with-icon">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                <input id="inpClient" type="text" placeholder="Ex: M. Ondong (077 12 34 56)" required>
+              </div>
+            </div>
+
+            <!-- Articles commandés -->
+            <div class="input-block">
+              <label for="inpArticles" class="input-label">Articles commandés <span class="req">*</span></label>
+              <textarea id="inpArticles" rows="2" placeholder="Ex: 2 paires de chaussures Nike, 1 robe noire..." required></textarea>
+              <span class="input-hint">Décrivez précisément les articles à livrer au client.</span>
+            </div>
+
+            <!-- Sélection Commune (avec tarification automatique) -->
+            <div class="input-block">
+              <label for="inpCity" class="input-label">Commune (Tarif fixé automatiquement) <span class="req">*</span></label>
+              <select id="inpCity">
+                <option value="Libreville" selected>Libreville — 2 000 FCFA</option>
+                <option value="Owendo">Owendo — 3 000 FCFA</option>
+                <option value="Akanda">Akanda — 3 000 FCFA</option>
+                <option value="Ntoum">Ntoum — 4 000 FCFA</option>
+              </select>
+            </div>
+
+            <!-- Nombre de colis & Frais en FCFA (auto-rempli) -->
+            <div class="input-row-2">
+              <div class="input-block">
+                <label for="inpPieces" class="input-label">Nombre de colis <span class="req">*</span></label>
+                <input id="inpPieces" type="number" inputmode="numeric" min="1" max="100" value="1" required>
+              </div>
+              <div class="input-block">
+                <label for="inpFee" class="input-label">Frais livraison (FCFA) <span class="req">*</span></label>
+                <div class="currency-wrap">
+                  <input id="inpFee" type="number" inputmode="numeric" min="0" step="500" value="2000" required>
+                  <span class="currency-tag">FCFA</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quartier Gabon -->
+            <div class="input-block">
+              <label for="inpQuarter" class="input-label">Quartier / Repère de livraison <span class="req">*</span></label>
+              <div class="input-with-icon">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                <input id="inpQuarter" list="datalistQuarters" placeholder="Tapez ou choisissez le quartier..." required>
+                <datalist id="datalistQuarters"></datalist>
+              </div>
+            </div>
+
+            <!-- Heure Alarme -->
+            <div class="input-block">
+              <label for="inpAlarmTime" class="input-label">Heure de livraison / Alarme de rappel <span class="req">*</span></label>
+              <input id="inpAlarmTime" type="datetime-local" required>
+            </div>
+
+            <div class="err-box" id="formError"></div>
+
+            <div class="form-btn-stack">
+              <button type="button" class="btn-native btn-primary-native" id="btnSubmitOrder">
+                <span id="btnSubmitLabel">Enregistrer la commande</span>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+              </button>
+              <button type="button" class="btn-native btn-cancel-native hid" id="btnCancelEdit">Annuler la modification</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- ========== ÉCRAN 3 : HISTORIQUE ========== -->
+      <section id="screenHist" class="mobile-screen">
+        <div class="hist-summary-banner">
+          <div class="hist-summary-item">
+            <span class="hist-val text-green" id="histDeliveredCount">0</span>
+            <span class="hist-lbl">Livrées au total</span>
+          </div>
+          <div class="hist-summary-divider"></div>
+          <div class="hist-summary-item">
+            <span class="hist-val text-green" id="histDeliveredMoney">0 FCFA</span>
+            <span class="hist-lbl">Total Frais Encaissés</span>
+          </div>
+        </div>
+
+        <div class="feed-accordion-hint">
+          <span>👆 Touchez une course terminée pour revoir les détails</span>
+        </div>
+
+        <div id="ordersFeedHist" class="accordion-orders-list"></div>
+      </section>
+
+      <!-- ========== ÉCRAN 4 : BILAN & STATISTIQUES ========== -->
+      <section id="screenStats" class="mobile-screen">
+        <div class="mobile-card stats-card">
+          <h2 class="card-section-title">Bilan de vos Activités</h2>
+          
+          <div class="stats-grid-2x2">
+            <div class="stat-box-native">
+              <span class="stat-num" id="stTotalOrders">0</span>
+              <span class="stat-lbl">Courses créées</span>
+            </div>
+            <div class="stat-box-native">
+              <span class="stat-num color-blue" id="stPendingOrders">0</span>
+              <span class="stat-lbl">À livrer</span>
+            </div>
+            <div class="stat-box-native">
+              <span class="stat-num color-green" id="stDoneOrders">0</span>
+              <span class="stat-lbl">Livrées</span>
+            </div>
+            <div class="stat-box-native">
+              <span class="stat-num color-amber" id="stRevenue">0 F</span>
+              <span class="stat-lbl">Gains réalisés</span>
+            </div>
+          </div>
+
+          <h3 class="card-sub-title" style="margin-top:20px">Top Quartiers Desservis</h3>
+          <div id="statsTopQuarters" class="top-quarters-list"></div>
+        </div>
+      </section>
+
+      <!-- ========== ÉCRAN 5 : RÉGLAGES, SONNERIES & SUPPORT ========== -->
+      <section id="screenSettings" class="mobile-screen">
+        <!-- NOTIFICATIONS EN ARRIÈRE-PLAN (APP FERMÉE) -->
+      <div class="mobile-card">
+        <div class="notif-perm-header">
+          <div class="notif-ico">🔔</div>
+          <div>
+            <h2 class="card-section-title" style="margin-bottom:2px">Notifications en Arrière-Plan</h2>
+            <p class="card-desc" style="margin-bottom:0">Recevez vos alarmes en temps réel même lorsque l'application ou l'écran est fermé.</p>
+          </div>
+        </div>
+        <div class="notif-status-badge" id="notifStatusBox">
+          <span class="status-dot" id="notifStatusDot"></span>
+          <span id="notifStatusText">Vérification des autorisations...</span>
+        </div>
+        <button id="btnEnableNotifications" class="btn-native btn-secondary-native" type="button" style="margin-top:10px">
+          <span>🔔 Activer les notifications en arrière-plan</span>
+        </button>
+      </div>
+
+      <!-- CARTE SUPPORT TECHNIQUE & DÉVELOPPEUR -->
+        <div class="mobile-card support-card">
+          <div class="support-header">
+            <div class="support-badge-icon">👨‍💻</div>
+            <div>
+              <h2 class="card-section-title" style="margin-bottom:2px">Assistance & Développeur</h2>
+              <span class="support-subtitle">Contact direct en cas de problème technique ou bug</span>
+            </div>
+          </div>
+
+          <div class="support-contact-list">
+            <!-- Téléphone / WhatsApp -->
+            <a href="tel:062025768" class="support-contact-item">
+              <div class="contact-icon-box phone-box">📞</div>
+              <div class="contact-meta">
+                <span class="contact-label">Appel Téléphonique</span>
+                <span class="contact-val">062 02 57 68</span>
+              </div>
+              <span class="btn-contact-action">Appeler</span>
+            </a>
+
+            <!-- WhatsApp Direct -->
+            <a href="https://wa.me/24162025768" target="_blank" class="support-contact-item">
+              <div class="contact-icon-box whatsapp-box">💬</div>
+              <div class="contact-meta">
+                <span class="contact-label">WhatsApp Direct</span>
+                <span class="contact-val">+241 62 02 57 68</span>
+              </div>
+              <span class="btn-contact-action whatsapp-action">Écrire</span>
+            </a>
+
+            <!-- Email -->
+            <a href="mailto:tristannkoghe7@gmail.com" class="support-contact-item">
+              <div class="contact-icon-box email-box">✉️</div>
+              <div class="contact-meta">
+                <span class="contact-label">Email Développeur</span>
+                <span class="contact-val">tristannkoghe7@gmail.com</span>
+              </div>
+              <span class="btn-contact-action">Envoyer</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- SONNERIES PERSONNALISÉES DU TÉLÉPHONE & INTÉGRÉES -->
+        <div class="mobile-card">
+          <h2 class="card-section-title">Sonnerie de l'Alarme</h2>
+          <p class="card-desc">Utilisez une musique de votre téléphone ou l'une des sonneries intégrées :</p>
+
+          <!-- Import Audio du Téléphone -->
+          <div class="custom-audio-box">
+            <div class="custom-audio-title">📱 Sonnerie de votre téléphone portable :</div>
+            <input type="file" id="inpCustomAudio" accept="audio/*" class="custom-audio-file-input">
+            <label for="inpCustomAudio" class="btn-upload-audio" id="lblCustomAudio">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+              <span id="txtCustomAudio">Choisir une musique de mon téléphone...</span>
+            </label>
+            <button id="btnPlayCustomAudio" class="btn-test-custom hid" type="button">▶ Écouter mon son</button>
+          </div>
+
+          <div class="alarm-pick-divider"><span>OU choisir une sonnerie intégrée</span></div>
+
+          <div class="alarm-pick-list">
+            <div class="alarm-pick-item active" data-sound="melodic">
+              <div class="alarm-pick-radio"></div>
+              <div class="alarm-pick-content">
+                <span class="alarm-pick-title">🎵 Carillon Harmonique</span>
+                <span class="alarm-pick-sub">Cristallin et relaxant</span>
+              </div>
+              <button class="btn-sound-preview" data-preview="melodic" type="button">Écouter</button>
+            </div>
+
+            <div class="alarm-pick-item" data-sound="marimba">
+              <div class="alarm-pick-radio"></div>
+              <div class="alarm-pick-content">
+                <span class="alarm-pick-title">🌴 Marimba Gabonais</span>
+                <span class="alarm-pick-sub">Chaleureux et entraînant</span>
+              </div>
+              <button class="btn-sound-preview" data-preview="marimba" type="button">Écouter</button>
+            </div>
+
+            <div class="alarm-pick-item" data-sound="dingdong">
+              <div class="alarm-pick-radio"></div>
+              <div class="alarm-pick-content">
+                <span class="alarm-pick-title">🔔 Sonnette Prestige</span>
+                <span class="alarm-pick-sub">Double tonalité chic "Ding-Dong"</span>
+              </div>
+              <button class="btn-sound-preview" data-preview="dingdong" type="button">Écouter</button>
+            </div>
+
+            <div class="alarm-pick-item" data-sound="synth">
+              <div class="alarm-pick-radio"></div>
+              <div class="alarm-pick-content">
+                <span class="alarm-pick-title">⚡ Bip Électro Futuriste</span>
+                <span class="alarm-pick-sub">Synthétiseur moderne 2026</span>
+              </div>
+              <button class="btn-sound-preview" data-preview="synth" type="button">Écouter</button>
+            </div>
+
+            <div class="alarm-pick-item" data-sound="urgent">
+              <div class="alarm-pick-radio"></div>
+              <div class="alarm-pick-content">
+                <span class="alarm-pick-title">🚨 Alerte Dynamique</span>
+                <span class="alarm-pick-sub">Pour environnements bruyants</span>
+              </div>
+              <button class="btn-sound-preview" data-preview="urgent" type="button">Écouter</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOUTON DÉCONNEXION & INSTALLATION PWA -->
+        <div class="mobile-card" style="text-align:center">
+          <button id="btnPwaInstall" class="btn-native btn-secondary-native hid" style="margin-bottom:12px" type="button">
+            <span>📲 Installer l'application sur l'écran d'accueil</span>
+          </button>
+          <button id="btnSettingsLogout" class="btn-native btn-logout-danger" type="button">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            <span>Se déconnecter de ma session</span>
+          </button>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ==================== BOTTOM NAVIGATION BAR ==================== -->
+    <nav class="mobile-bottom-nav">
+      <button class="bottom-tab-btn active" data-target="todo">
+        <div class="tab-icon-wrap">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          <span class="tab-badge" id="bottomBadgeTodo">0</span>
+        </div>
+        <span class="tab-label">À livrer</span>
+      </button>
+
+      <button class="bottom-tab-btn action-center" data-target="new">
+        <div class="center-fab-icon">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        </div>
+        <span class="tab-label">Ajouter</span>
+      </button>
+
+      <button class="bottom-tab-btn" data-target="hist">
+        <div class="tab-icon-wrap">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        </div>
+        <span class="tab-label">Historique</span>
+      </button>
+
+      <button class="bottom-tab-btn" data-target="settings">
+        <div class="tab-icon-wrap">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        </div>
+        <span class="tab-label">Réglages</span>
+      </button>
+    </nav>
+
+  </div>
+
+  <!-- MODAL DE CONFIRMATION -->
+  <div id="confirmModal" class="native-modal-backdrop hid" role="dialog" aria-modal="true">
+    <div class="native-modal-card">
+      <h3 id="confirmTitle" class="modal-h">Confirmation</h3>
+      <p id="confirmMsg" class="modal-p"></p>
+      <div class="modal-btn-row">
+        <button class="btn-native btn-secondary-native" id="confirmCancelBtn" type="button">Annuler</button>
+        <button class="btn-native btn-danger-native" id="confirmOkBtn" type="button">Confirmer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATIONS -->
+  <div id="toastContainer" class="mobile-toast-container" aria-live="polite"></div>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

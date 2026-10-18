@@ -1,0 +1,47 @@
+Suivi des Livraisons - Gabon Native Mobile Edition (2026)
+=========================================================
+
+Application mobile PWA (Progressive Web App) pour la gestion et le suivi des livraisons au Gabon (Grand Libreville).
+
+1. NOTIFICATIONS EN TEMPS RÉEL (MÊME QUAND L'APPLICATION EST FERMÉE)
+--------------------------------------------------------------------
+- Grâce au Service Worker (sw.js) et à l'API Notification native :
+  * Les alarmes sont programmées dans l'appareil dès l'enregistrement de la commande.
+  * Même si votre application ou l'écran de votre smartphone est éteint/fermé, votre téléphone vibre et affiche la notification système avec le son de rappel et les détails de la commande.
+  * L'alerte reste affichée ("requireInteraction") jusqu'à ce que vous la touchiez.
+  * Un simple clic sur la notification réouvre automatiquement l'application sur la commande !
+- Pour activer les alertes : Allez dans "Réglages" et cliquez sur "🔔 Activer les notifications en arrière-plan" puis "Autoriser".
+
+2. TARIFICATION AUTOMATIQUE PAR COMMUNE DU GABON
+------------------------------------------------
+Les frais de livraison se remplissent automatiquement selon la commune :
+- Libreville : 2 000 FCFA
+- Owendo    : 3 000 FCFA
+- Akanda    : 3 000 FCFA
+- Ntoum     : 4 000 FCFA
+
+3. AFFICHAGE EN LISTE ACCORDÉON (DÉTAILS AU CLIC)
+-------------------------------------------------
+- La liste est très propre et compacte.
+- Touchez n'importe quel nom pour déplier les détails :
+  * Les articles complets
+  * Le nombre de colis
+  * Le bouton "📞 Appeler le client" pour téléphoner directement
+  * L'heure de l'alarme
+  * Les actions rapides : "✓ Livrée", "⏱ +30m", "✏️ Modifier", "🗑 Supprimer"
+
+4. SONNERIES DU TÉLÉPHONE & INTÉGRÉES
+-------------------------------------
+- Vous pouvez importer n'importe quelle musique / sonnerie MP3 de votre smartphone.
+- OU choisir parmi les 5 mélodies intégrées (Carillon, Marimba, Ding-Dong, Bip électro, Alerte).
+
+5. ASSISTANCE TECHNIQUE & SIGNALEMENT DE BUGS
+---------------------------------------------
+Disponible directement dans l'onglet "Réglages" :
+- Développeur : Tristan Nkoghe
+- Téléphone & WhatsApp : 062 02 57 68 (+241 62 02 57 68)
+- Email : tristannkoghe7@gmail.com
+
+6. APPLICATION PWA TÉLÉCHARGEABLE
+---------------------------------
+Installez l'application sur votre écran d'accueil via le bouton dans Réglages ou via le menu du navigateur ("Ajouter à l'écran d'accueil").

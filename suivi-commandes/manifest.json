@@ -1,0 +1,20 @@
+{
+  "name": "Suivi des Commandes & Livraisons",
+  "short_name": "Commandes",
+  "description": "Application autonome de suivi des livraisons, alertes et encaissements",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0f172a",
+  "theme_color": "#2563eb",
+  "categories": ["business", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

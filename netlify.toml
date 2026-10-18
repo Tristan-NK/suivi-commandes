@@ -1,0 +1,17 @@
+# Dossier de publication Netlify
+[build]
+  publish = "suivi-commandes"
+
+# Configuration des en-têtes de sécurité et PWA
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+
+# Headers spécifiques au Service Worker (ne pas mettre en cache le sw.js trop longtemps)
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
